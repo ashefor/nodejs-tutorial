@@ -1,0 +1,49 @@
+<%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/cart.css">
+</head>
+
+<body>
+    <%- include('../includes/navigation.ejs') %>
+    <main>
+        <ul class="cart__item-list">
+            <% products.forEach(p => { %>
+            <li class="cart__item">
+                <h1><%= p.productId.title %></h1>
+                <h2>Quantity: <%= p.quantity %></h2>
+            </li>
+            <% }) %>
+        </ul>
+        <div class="centered">
+            <h2>Total: $<%= totalSum %></h2>
+        </div>
+        <div class="centered">
+            <button id="order-btn" class="btn">ORDER!</button>
+            <script src="https://js.paystack.co/v1/inline.js"></script>
+            <script>
+                var orderBtn = document.getElementById('order-btn');
+                orderBtn.addEventListener('click', payWithPaystack, false);
+
+                function payWithPaystack() {
+                    var handler = PaystackPop.setup({
+                        key: '<%= PAYSTACK_KEY %>', // Replace with your public key
+                        email: '<%= email %>',
+                        amount: '<%= totalSum %>' * 100, // the amount value is multiplied by 100 to convert to the lowest currency unit
+                        currency: 'NGN', // Use GHS for Ghana Cedis or USD for US Dollars
+                        // ref: 'YOUR_REFERENCE', // Replace with a reference you generated
+                        callback: function (response) {
+                            //this happens after the payment is completed successfully
+                            var reference = response.reference;
+                            // alert('Payment complete! Reference: ' + reference);
+                            window.location.href = '/checkout/success?reference=' + reference;
+                            // Make an AJAX call to your server with the reference to verify the transaction
+                        },
+                        onClose: function () {
+                            alert('Transaction was not completed, window closed.');
+                        },
+                    });
+                    handler.openIframe();
+                }
+            </script>
+        </div>
+    </main>
+    <%- include('../includes/end.ejs') %>

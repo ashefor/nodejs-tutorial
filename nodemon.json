@@ -1,0 +1,9 @@
+{
+    "env": {
+        "NODE_ENV": "development",
+        "PAYSTACK_KEY": "pk_test_2d5285023c731fea630471493a69148dcfd03274",
+        "MONGO_USER": "mashefor",
+        "MONGO_PASSWORD": "mykael1234",
+        "MONGO_DEFAULT_DATABASE": "shop"
+    }
+}
