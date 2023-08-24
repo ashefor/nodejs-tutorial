@@ -54,9 +54,18 @@ const authRoutes = require('./routes/auth');
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
 
-app.use(helmet())
+const scriptSources = ["'self'", "'unsafe-inline'", 'https://js.paystack.co/v1/inline.js']
+ 
+// app.use(helmet.contentSecurityPolicy({
+//   useDefaults: true,
+//   directives: {
+//     scriptSrc: scriptSources,
+//     "default-src": ["'self'", "https://js.paystack.co/v1/inline.js"],
+//     "frame-src": ["'self'", "https://js.paystack.co/v1/inline.js"]
+//   }
+// }))
 app.use(compression())
-app.use(morgan('combined', {stream: accessLogStream}));
+// app.use(morgan('combined', {stream: accessLogStream}));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(multer({storage: diskStorage, fileFilter: fileFilter}).single('image'));
